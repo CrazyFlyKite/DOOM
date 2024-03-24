@@ -1,10 +1,14 @@
 import sys
+from contextlib import redirect_stdout
 
-import pygame
+with redirect_stdout(None):
+	import pygame
 
 from drawing import Drawing
 from player import Player
 from utilities import *
+from sprites import Sprites
+from ray_casting import ray_casting
 
 # Initialize Pygame
 pygame.init()
@@ -14,6 +18,7 @@ screen: pygame.Surface = pygame.display.set_mode((WIDTH, HEIGHT))
 screen_map: pygame.Surface = pygame.Surface((MAP_WIDTH, MAP_HEIGHT))
 clock: pygame.time.Clock = pygame.time.Clock()
 player: Player = Player()
+sprites: Sprites = Sprites()
 drawing: Drawing = Drawing(screen, screen_map)
 
 if __name__ == '__main__':
@@ -28,7 +33,8 @@ if __name__ == '__main__':
 
 		# Draw
 		drawing.background(player.angle)
-		drawing.world(player.position, player.angle)
+		walls: Walls = ray_casting(player, drawing.textures)
+		drawing.world(walls + [_object.object_locate(player, walls) for _object in sprites.list_of_objects])
 		drawing.fps(clock)
 		drawing.mini_map(player)
 

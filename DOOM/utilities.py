@@ -1,10 +1,15 @@
+from enum import Enum
 from math import tan, pi
 from os import PathLike
-from typing import Tuple, Final, TypeAlias
+from typing import List, Tuple, Final, TypeAlias
+
+from pygame import Surface
 
 # Custom types
 Number: TypeAlias = int | float
 Position: TypeAlias = Tuple[Number, Number]
+Wall: TypeAlias = Tuple[float, Surface, Position]
+Walls: TypeAlias = List[Wall]
 Color: TypeAlias = Tuple[int, int, int]
 PathLikeString: TypeAlias = str | bytes | PathLike
 
@@ -16,6 +21,7 @@ HALF_HEIGHT: Final[int] = HEIGHT // 2
 FPS_POSITION: Final[Position] = WIDTH - 50, 5
 TILE: Final[int] = 100
 FPS: Final[int] = 60
+MAP_FILE: Final[PathLikeString] = '../assets/data/map.txt'
 
 # Mini map
 MAP_SCALE: Final[int] = 5
@@ -25,7 +31,7 @@ MAP_WIDTH: Final[int] = WIDTH // MAP_SCALE
 MAP_HEIGHT: Final[int] = HEIGHT // MAP_SCALE
 
 # Player
-PLAYER_POSITION: Position = HALF_WIDTH, HALF_HEIGHT
+PLAYER_POSITION: Position = HALF_WIDTH // 4, HALF_HEIGHT
 PLAYER_ANGLE: Final[float] = 0.0
 PLAYER_SPEED: Final[int] = 2
 
@@ -39,27 +45,35 @@ DIST: Final[float] = NUMBER_RAYS / (2 * tan(HALF_FOV))
 PROJECTION_COEFFICIENT: Final[float] = 3 * DIST * TILE
 SCALE: Final[int] = WIDTH // NUMBER_RAYS
 
-# Game elements
-WALL1: Final[str] = '1'
-WALL2: Final[str] = '2'
-SKY: Final[str] = 'sky'
-
-# Texture settings
+# Textures
 TEXTURE_WIDTH: Final[int] = 1200
 TEXTURE_HEIGHT: Final[int] = 1200
 TEXTURE_SCALE: Final[int] = TEXTURE_WIDTH // TILE
 
-# FILES
-MAP_FILE: Final[PathLikeString] = '../assets/map.txt'
-TEXTURE1: Final[PathLikeString] = '../assets/images/texture 1.png'
-TEXTURE2: Final[PathLikeString] = '../assets/images/texture 2.png'
-TEXTURE_SKY: Final[PathLikeString] = '../assets/images/sky.png'
+
+class ElementType(Enum):
+	WALL1 = 'wall1'
+	WALL2 = 'wall2'
+	SKY = 'sky'
+
+
+# Sprites
+DOUBLE_PI: Final[float] = pi * 2
+CENTER_RAY: Final[int] = NUMBER_RAYS // 2 - 1
+FAKE_RAYS: Final[int] = 100
+
+
+class SpriteType:
+	BARREL = 'barrel'
+	PEDESTAL = 'pedestal'
+	DEVIL = 'devil'
+
 
 # Colors
 RED: Final[Color] = 220, 0, 0
+DARK_ORANGE: Final[Color] = 255, 140, 0
 YELLOW: Final[Color] = 220, 220, 0
-SANDY: Final[Color] = 244, 164, 96
 GREEN: Final[Color] = 0, 80, 0
-SKY_BLUE: Final[Color] = 0, 186, 255
+DARK_BROWN: Final[Color] = 97, 61, 25
 DARK_GRAY: Final[Color] = 110, 110, 110
 BLACK: Final[Color] = 0, 0, 0

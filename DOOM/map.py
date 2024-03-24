@@ -16,7 +16,7 @@ def load_map(map_file: PathLikeString, separator: Optional[str] = ' ') -> np.nda
 
 # Fill
 map_array: np.ndarray = load_map(MAP_FILE)
-world_map: Dict[Position, str] = {}
+world_map: Dict[Position, ElementType] = {}
 mini_map: Set[Position] = set()
 
 for j, row in enumerate(map_array):
@@ -25,6 +25,6 @@ for j, row in enumerate(map_array):
 			mini_map.add((i * MAP_TILE, j * MAP_TILE))
 
 			if item == 1:
-				world_map[(i * TILE, j * TILE)] = WALL1
+				world_map[(i * TILE, j * TILE)] = ElementType.WALL1
 			elif item == 2:
-				world_map[(i * TILE, j * TILE)] = WALL2
+				world_map[(i * TILE, j * TILE)] = ElementType.WALL2

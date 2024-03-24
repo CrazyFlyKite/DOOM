@@ -12,7 +12,7 @@ class Player:
 		self._angle = PLAYER_ANGLE
 
 	@property
-	def x(self) -> float:
+	def x(self) -> Number:
 		return self._x
 
 	@x.setter
@@ -20,7 +20,7 @@ class Player:
 		self._x = float(value)
 
 	@property
-	def y(self) -> float:
+	def y(self) -> Number:
 		return self._y
 
 	@y.setter
@@ -66,3 +66,5 @@ class Player:
 
 		if keys[pygame.K_RIGHT]:
 			self.angle += 0.02
+
+		self.angle %= DOUBLE_PI
