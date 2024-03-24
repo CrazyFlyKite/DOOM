@@ -1,4 +1,4 @@
-from typing import Set, Optional
+from typing import Dict, Set, Optional
 
 import numpy as np
 
@@ -16,11 +16,15 @@ def load_map(map_file: PathLikeString, separator: Optional[str] = ' ') -> np.nda
 
 # Fill
 map_array: np.ndarray = load_map(MAP_FILE)
-world_map: Set[Position] = set()
+world_map: Dict[Position, str] = {}
 mini_map: Set[Position] = set()
 
 for j, row in enumerate(map_array):
 	for i, item in enumerate(row):
-		if item == 1:
-			world_map.add((i * TILE, j * TILE))
+		if item != 0:
 			mini_map.add((i * MAP_TILE, j * MAP_TILE))
+
+			if item == 1:
+				world_map[(i * TILE, j * TILE)] = WALL1
+			elif item == 2:
+				world_map[(i * TILE, j * TILE)] = WALL2

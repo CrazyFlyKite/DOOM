@@ -8,9 +8,6 @@ Position: TypeAlias = Tuple[Number, Number]
 Color: TypeAlias = Tuple[int, int, int]
 PathLikeString: TypeAlias = str | bytes | PathLike
 
-# Map
-MAP_FILE: Final[PathLikeString] = '../assets/map.txt'
-
 # Main map
 WIDTH: Final[int] = 1200
 HEIGHT: Final[int] = 800
@@ -42,9 +39,26 @@ DIST: Final[float] = NUMBER_RAYS / (2 * tan(HALF_FOV))
 PROJECTION_COEFFICIENT: Final[float] = 3 * DIST * TILE
 SCALE: Final[int] = WIDTH // NUMBER_RAYS
 
+# Game elements
+WALL1: Final[str] = '1'
+WALL2: Final[str] = '2'
+SKY: Final[str] = 'sky'
+
+# Texture settings
+TEXTURE_WIDTH: Final[int] = 1200
+TEXTURE_HEIGHT: Final[int] = 1200
+TEXTURE_SCALE: Final[int] = TEXTURE_WIDTH // TILE
+
+# FILES
+MAP_FILE: Final[PathLikeString] = '../assets/map.txt'
+TEXTURE1: Final[PathLikeString] = '../assets/images/texture 1.png'
+TEXTURE2: Final[PathLikeString] = '../assets/images/texture 2.png'
+TEXTURE_SKY: Final[PathLikeString] = '../assets/images/sky.png'
+
 # Colors
 RED: Final[Color] = 220, 0, 0
 YELLOW: Final[Color] = 220, 220, 0
+SANDY: Final[Color] = 244, 164, 96
 GREEN: Final[Color] = 0, 80, 0
 SKY_BLUE: Final[Color] = 0, 186, 255
 DARK_GRAY: Final[Color] = 110, 110, 110

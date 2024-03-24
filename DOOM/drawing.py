@@ -1,4 +1,4 @@
-from math import sin, cos, floor
+from math import sin, cos, degrees
 
 import pygame
 
@@ -13,16 +13,24 @@ class Drawing:
 		self.screen = screen
 		self.screen_map = screen_map
 		self.font = pygame.font.SysFont('Arial', 30, bold=True)
+		self.textures = {
+			WALL1: pygame.image.load(TEXTURE1).convert(),
+			WALL2: pygame.image.load(TEXTURE2).convert(),
+			SKY: pygame.image.load(TEXTURE_SKY).convert()
+		}
 
-	def background(self) -> None:
-		pygame.draw.rect(self.screen, SKY_BLUE, (0, 0, WIDTH, HALF_HEIGHT))
+	def background(self, angle: float) -> None:
+		sky_offset: float = -5 * degrees(angle) % WIDTH
+		self.screen.blit(self.textures[SKY], (sky_offset, 0))
+		self.screen.blit(self.textures[SKY], (sky_offset - WIDTH, 0))
+		self.screen.blit(self.textures[SKY], (sky_offset + WIDTH, 0))
 		pygame.draw.rect(self.screen, DARK_GRAY, (0, HALF_HEIGHT, WIDTH, HALF_HEIGHT))
 
 	def world(self, player_position: Position, player_angle: float) -> None:
-		ray_casting(self.screen, player_position, player_angle)
+		ray_casting(self.screen, player_position, player_angle, self.textures)
 
 	def fps(self, clock: pygame.time.Clock) -> None:
-		self.screen.blit(self.font.render(str(floor(clock.get_fps())), 0, RED), FPS_POSITION)
+		self.screen.blit(self.font.render(str(int(clock.get_fps())), 0, RED), FPS_POSITION)
 
 	def mini_map(self, player: Player) -> None:
 		self.screen_map.fill(BLACK)
@@ -32,6 +40,6 @@ class Drawing:
 		pygame.draw.circle(self.screen_map, RED, (map_x, map_y), 5)
 
 		for x, y in mini_map:
-			pygame.draw.rect(self.screen_map, GREEN, (x, y, MAP_TILE, MAP_TILE))
+			pygame.draw.rect(self.screen_map, SANDY, (x, y, MAP_TILE, MAP_TILE))
 
 		self.screen.blit(self.screen_map, MAP_POSITION)

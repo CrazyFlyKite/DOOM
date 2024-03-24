@@ -27,7 +27,7 @@ if __name__ == '__main__':
 		player.move()
 
 		# Draw
-		drawing.background()
+		drawing.background(player.angle)
 		drawing.world(player.position, player.angle)
 		drawing.fps(clock)
 		drawing.mini_map(player)
