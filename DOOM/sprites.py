@@ -24,19 +24,20 @@ class Sprites:
 
 
 class Sprite:
-	def __init__(self, _object: pygame.Surface | List[pygame.Surface], is_static: bool, position: Position, shift: float, scale: float) -> None:
+	def __init__(self, _object: Surface | List[Surface], is_static: bool, position: Position, shift: float,
+	             scale: float) -> None:
 		self._object = _object
 		self._is_static = is_static
 		self._x, self._y = position[0] * TILE, position[1] * TILE
 		self._shift = shift
 		self._scale = scale
 
-		if not self._is_static:
+		if not is_static:
 			self.sprite_angles = [frozenset(range(i, i + 45)) for i in range(0, 360, 45)]
 			self.sprite_positions = {angle: pos for angle, pos in zip(self.sprite_angles, self._object)}
 
 	@property
-	def object(self) -> pygame.Surface | List[pygame.Surface]:
+	def object(self) -> Surface | List[Surface]:
 		return self._object
 
 	@object.setter
@@ -56,10 +57,6 @@ class Sprite:
 		return self._y
 
 	@property
-	def position(self) -> Position:
-		return self._x, self._y
-
-	@property
 	def shift(self) -> float:
 		return self._shift
 
@@ -67,7 +64,7 @@ class Sprite:
 	def scale(self) -> float:
 		return self._scale
 
-	def object_locate(self, player: Player, walls: Walls):
+	def object_locate(self, player: Player, walls: Walls) -> Tuple[float, Surface, Position] | Tuple[bool]:
 		fake_walls: Walls = [walls[0] for _ in range(FAKE_RAYS)] + walls + [walls[-1] for _ in range(FAKE_RAYS)]
 		dx, dy = self.x - player.x, self.y - player.y
 		distance_to_sprite: float = sqrt(dx ** 2 + dy ** 2)
@@ -85,7 +82,7 @@ class Sprite:
 		if 0 <= fake_ray <= NUMBER_RAYS - 1 + 2 * FAKE_RAYS and distance_to_sprite < fake_walls[fake_ray][0]:
 			projection_height: int = int(PROJECTION_COEFFICIENT / distance_to_sprite * self.scale)
 			half_projection_height: int = projection_height // 2
-			shift = half_projection_height * self.shift
+			shift: float = half_projection_height * self.shift
 
 			if not self.is_static:
 				if theta < 0:
@@ -101,7 +98,7 @@ class Sprite:
 					self.object = self.sprite_positions[angles]
 
 			sprite_position: Position = current_ray * SCALE - half_projection_height, HALF_HEIGHT - half_projection_height + shift
-			sprite: pygame.Surface = pygame.transform.scale(self.object, (projection_height, projection_height))
+			sprite: Surface = pygame.transform.scale(self.object, (projection_height, projection_height))
 
 			return distance_to_sprite, sprite, sprite_position
 		else:

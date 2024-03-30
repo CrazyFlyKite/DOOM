@@ -18,22 +18,26 @@ WIDTH: Final[int] = 1200
 HEIGHT: Final[int] = 800
 HALF_WIDTH: Final[int] = WIDTH // 2
 HALF_HEIGHT: Final[int] = HEIGHT // 2
+PENTA_HEIGHT: Final[int] = HEIGHT * 5
 FPS_POSITION: Final[Position] = WIDTH - 50, 5
 TILE: Final[int] = 100
 FPS: Final[int] = 60
 MAP_FILE: Final[PathLikeString] = '../assets/data/map.txt'
 
 # Mini map
-MAP_SCALE: Final[int] = 5
+MINIMAP_SCALE: Final[int] = 5
+MINIMAP_RESOLUTION: Final[Position] = (WIDTH // MINIMAP_SCALE, HEIGHT // MINIMAP_SCALE)
+MAP_SCALE: Final[int] = 2 * MINIMAP_SCALE
 MAP_TILE: Final[int] = TILE // MAP_SCALE
-MAP_POSITION: Final[Position] = 0, HEIGHT - HEIGHT // MAP_SCALE
+MAP_POSITION: Final[Position] = 0, HEIGHT - HEIGHT // MINIMAP_SCALE
 MAP_WIDTH: Final[int] = WIDTH // MAP_SCALE
 MAP_HEIGHT: Final[int] = HEIGHT // MAP_SCALE
 
 # Player
 PLAYER_POSITION: Position = HALF_WIDTH // 4, HALF_HEIGHT
 PLAYER_ANGLE: Final[float] = 0.0
-PLAYER_SPEED: Final[int] = 2
+PLAYER_SPEED: Final[int] = 3
+PLAYER_ROTATION_SPEED: Final[float] = 0.03
 
 # Ray casting
 FOV: Final[float] = pi / 3
@@ -54,6 +58,8 @@ TEXTURE_SCALE: Final[int] = TEXTURE_WIDTH // TILE
 class ElementType(Enum):
 	WALL1 = 'wall1'
 	WALL2 = 'wall2'
+	WALL3 = 'wall3'
+	WALL4 = 'wall4'
 	SKY = 'sky'
 
 

@@ -14,8 +14,8 @@ from ray_casting import ray_casting
 pygame.init()
 
 # Initialize variables
-screen: pygame.Surface = pygame.display.set_mode((WIDTH, HEIGHT))
-screen_map: pygame.Surface = pygame.Surface((MAP_WIDTH, MAP_HEIGHT))
+screen: Surface = pygame.display.set_mode((WIDTH, HEIGHT))
+screen_map: Surface = Surface(MINIMAP_RESOLUTION)
 clock: pygame.time.Clock = pygame.time.Clock()
 player: Player = Player()
 sprites: Sprites = Sprites()

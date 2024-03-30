@@ -62,9 +62,9 @@ class Player:
 
 		# Rotate
 		if keys[pygame.K_LEFT]:
-			self.angle -= 0.02
+			self.angle -= PLAYER_ROTATION_SPEED
 
 		if keys[pygame.K_RIGHT]:
-			self.angle += 0.02
+			self.angle += PLAYER_ROTATION_SPEED
 
 		self.angle %= DOUBLE_PI

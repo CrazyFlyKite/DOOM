@@ -8,13 +8,15 @@ from utilities import *
 
 
 class Drawing:
-	def __init__(self, screen: pygame.Surface, screen_map: pygame.Surface) -> None:
+	def __init__(self, screen: Surface, screen_map: Surface) -> None:
 		self.screen = screen
 		self.screen_map = screen_map
 		self.font = pygame.font.SysFont('Arial', 30, bold=True)
 		self.textures = {
 			ElementType.WALL1: pygame.image.load('../assets/images/wall 1.png').convert(),
 			ElementType.WALL2: pygame.image.load('../assets/images/wall 2.png').convert(),
+			ElementType.WALL3: pygame.image.load('../assets/images/wall 3.png').convert(),
+			ElementType.WALL4: pygame.image.load('../assets/images/wall 4.png').convert(),
 			ElementType.SKY: pygame.image.load('../assets/images/sky.png').convert()
 		}
 
