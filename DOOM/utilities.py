@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from enum import Enum
 from math import tan, pi
 from os import PathLike
 from typing import List, Tuple, Deque, Final, TypeAlias
@@ -12,6 +11,7 @@ Position: TypeAlias = Tuple[Number, Number]
 Surfaces: TypeAlias = List[Surface]
 Wall: TypeAlias = Tuple[float, Surface, Position]
 Walls: TypeAlias = List[Wall]
+RayCastedWalls: TypeAlias = List[Tuple[float, int, int, int]]
 Color: TypeAlias = Tuple[int, int, int]
 PathLikeString: TypeAlias = str | bytes | PathLike
 
@@ -44,6 +44,7 @@ PLAYER_ANGLE: Final[float] = 0
 PLAYER_SPEED: Final[int] = 3
 PLAYER_ROTATION_SPEED: Final[float] = 0.03
 PLAYER_MOUSE_SENSITIVITY: Final[float] = 0.003
+PLAYER_SIDE: Final[int] = 50
 
 # Ray casting
 FOV: Final[float] = pi / 3
@@ -60,16 +61,13 @@ TEXTURE_WIDTH: Final[int] = 1200
 TEXTURE_HEIGHT: Final[int] = 1200
 TEXTURE_SCALE: Final[int] = TEXTURE_WIDTH // TILE
 
-
 # Texture types
-class ElementType(Enum):
-	VOID = 'void'
-	WALL1 = 'wall1'
-	WALL2 = 'wall2'
-	WALL3 = 'wall3'
-	WALL4 = 'wall4'
-	SKY = 'sky'
-
+VOID: Final[int] = 0
+WALL1: Final[int] = 1
+WALL2: Final[int] = 2
+WALL3: Final[int] = 3
+WALL4: Final[int] = 4
+SKY: Final[int] = 5
 
 # Sprite settings
 DOUBLE_PI: Final[float] = pi * 2
@@ -80,10 +78,10 @@ FAKE_RAYS_RANGE: Final[int] = NUMBER_RAYS - 1 + 2 * FAKE_RAYS
 
 # Sprite types
 class SpriteType:
-	BARREL = 'barrel'
-	PIN = 'pin'
-	DEVIL = 'devil'
-	FLAME = 'flame'
+	BARREL = 0
+	PIN = 1
+	DEVIL = 2
+	FLAME = 3
 
 
 # Sprite parameters

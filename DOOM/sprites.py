@@ -79,6 +79,8 @@ class Sprite:
 		self._animation_dist = parameters.animation_dist
 		self._animation_speed = parameters.animation_speed
 		self._animation_count = 0
+		self._blocked = parameters.blocked
+		self._side = 30
 		self._x, self._y = position[0] * TILE, position[1] * TILE
 
 		if self._viewing_angles:
@@ -126,12 +128,24 @@ class Sprite:
 		self._animation_count = value
 
 	@property
+	def is_blocked(self) -> bool:
+		return self._blocked
+
+	@property
+	def side(self) -> int:
+		return self._side
+
+	@property
 	def x(self) -> Number:
 		return self._x
 
 	@property
 	def y(self) -> Number:
 		return self._y
+
+	@property
+	def position(self) -> Position:
+		return self.x - self.side // 2, self.y - self.side // 2
 
 	def object_locate(self, player: Player) -> Tuple[float, Surface, Position] | Tuple[bool]:
 		dx, dy = self.x - player.x, self.y - player.y

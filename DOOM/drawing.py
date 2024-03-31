@@ -13,18 +13,18 @@ class Drawing:
 		self.screen_map = screen_map
 		self.font = pygame.font.SysFont('Arial', 30, bold=True)
 		self.textures = {
-			ElementType.WALL1: pygame.image.load('../assets/images/wall 1.png').convert(),
-			ElementType.WALL2: pygame.image.load('../assets/images/wall 2.png').convert(),
-			ElementType.WALL3: pygame.image.load('../assets/images/wall 3.png').convert(),
-			ElementType.WALL4: pygame.image.load('../assets/images/wall 4.png').convert(),
-			ElementType.SKY: pygame.image.load('../assets/images/sky.png').convert()
+			WALL1: pygame.image.load('../assets/images/wall 1.png').convert(),
+			WALL2: pygame.image.load('../assets/images/wall 2.png').convert(),
+			WALL3: pygame.image.load('../assets/images/wall 3.png').convert(),
+			WALL4: pygame.image.load('../assets/images/wall 4.png').convert(),
+			SKY: pygame.image.load('../assets/images/sky.png').convert()
 		}
 
 	def background(self, angle: float) -> None:
 		sky_offset: float = -5 * degrees(angle) % WIDTH
-		self.screen.blit(self.textures[ElementType.SKY], (sky_offset, 0))
-		self.screen.blit(self.textures[ElementType.SKY], (sky_offset - WIDTH, 0))
-		self.screen.blit(self.textures[ElementType.SKY], (sky_offset + WIDTH, 0))
+		self.screen.blit(self.textures[SKY], (sky_offset, 0))
+		self.screen.blit(self.textures[SKY], (sky_offset - WIDTH, 0))
+		self.screen.blit(self.textures[SKY], (sky_offset + WIDTH, 0))
 		pygame.draw.rect(self.screen, DARK_GRAY, (0, HALF_HEIGHT, WIDTH, HALF_HEIGHT))
 
 	def world(self, world_objects: Walls) -> None:
