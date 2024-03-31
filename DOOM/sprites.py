@@ -156,12 +156,10 @@ class Sprite:
 		if dx > 0 and 180 <= degrees(player.angle) <= 360 or dx < 0 and dy < 0:
 			gamma += DOUBLE_PI
 
-		delta_rays: int = int(gamma / DELTA_ANGLE)
-		current_ray: int = CENTER_RAY + delta_rays
+		current_ray: int = CENTER_RAY + int(gamma / DELTA_ANGLE)
 		distance_to_sprite *= cos(HALF_FOV - current_ray * DELTA_ANGLE)
 
-		fake_ray: int = current_ray + FAKE_RAYS
-		if 0 <= fake_ray <= FAKE_RAYS_RANGE and distance_to_sprite > 30:
+		if 0 <= current_ray + FAKE_RAYS <= FAKE_RAYS_RANGE and distance_to_sprite > 30:
 			projection_height: int = min(int(PROJECTION_COEFFICIENT / distance_to_sprite * self.scale), DOUBLE_HEIGHT)
 			half_projection_height: int = projection_height // 2
 			shift: float = half_projection_height * self.shift
