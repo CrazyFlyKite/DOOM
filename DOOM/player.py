@@ -1,3 +1,4 @@
+import sys
 from math import sin, cos
 from typing import Any
 
@@ -40,8 +41,17 @@ class Player:
 		self._angle = float(value)
 
 	def move(self) -> None:
+		self.key_control()
+		self.mouse_control()
+		self.angle %= DOUBLE_PI
+
+	def key_control(self) -> None:
 		sin_a, cos_a = sin(self.angle), cos(self.angle)
 		keys: pygame.key.ScancodeWrapper = pygame.key.get_pressed()
+
+		# Exit
+		if keys[pygame.K_ESCAPE]:
+			sys.exit(0)
 
 		# Move
 		if keys[pygame.K_w]:
@@ -67,4 +77,8 @@ class Player:
 		if keys[pygame.K_RIGHT]:
 			self.angle += PLAYER_ROTATION_SPEED
 
-		self.angle %= DOUBLE_PI
+	def mouse_control(self) -> None:
+		if pygame.mouse.get_focused():
+			difference: int = pygame.mouse.get_pos()[0] - HALF_WIDTH
+			pygame.mouse.set_pos((HALF_WIDTH, HALF_HEIGHT))
+			self.angle += difference * PLAYER_MOUSE_SENSITIVITY

@@ -34,7 +34,7 @@ class Drawing:
 				self.screen.blit(object_, object_position)
 
 	def fps(self, clock: pygame.time.Clock) -> None:
-		self.screen.blit(self.font.render(str(int(clock.get_fps())), 0, DARK_ORANGE), FPS_POSITION)
+		self.screen.blit(self.font.render(str(int(clock.get_fps())), 0, DARK_ORANGE), FPS_LABEL_POSITION)
 
 	def mini_map(self, player: Player) -> None:
 		self.screen_map.fill(BLACK)

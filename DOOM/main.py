@@ -15,15 +15,15 @@ pygame.init()
 
 # Initialize variables
 screen: Surface = pygame.display.set_mode((WIDTH, HEIGHT))
-screen_map: Surface = Surface(MINIMAP_RESOLUTION)
+mini_map: Surface = Surface(MINIMAP_RESOLUTION)
+pygame.mouse.set_visible(False)
 clock: pygame.time.Clock = pygame.time.Clock()
 player: Player = Player()
 sprites: Sprites = Sprites()
-drawing: Drawing = Drawing(screen, screen_map)
+drawing: Drawing = Drawing(screen, mini_map)
 
 if __name__ == '__main__':
 	while True:
-		# Check for exit
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				sys.exit(0)
@@ -34,7 +34,7 @@ if __name__ == '__main__':
 		# Draw
 		drawing.background(player.angle)
 		walls: Walls = ray_casting(player, drawing.textures)
-		drawing.world(walls + [_object.object_locate(player, walls) for _object in sprites.list_of_objects])
+		drawing.world(walls + [_object.object_locate(player) for _object in sprites.list_of_objects])
 		drawing.fps(clock)
 		drawing.mini_map(player)
 

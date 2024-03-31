@@ -4,8 +4,8 @@ from typing import Dict
 import pygame
 
 from map import world_map, WORLD_WIDTH, WORLD_HEIGHT
-from utilities import *
 from player import Player
+from utilities import *
 
 
 def mapping(a: float, b: float) -> Position:
