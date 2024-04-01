@@ -66,8 +66,9 @@ def ray_casting(player_position: Position, player_angle: float, _world_map: Numb
 	return casted_walls
 
 
-def ray_casting_walls(player: Player, textures: Surfaces) -> Walls:
+def ray_casting_walls(player: Player, textures: Surfaces) -> Tuple[Walls, Position]:
 	casted_walls: CastedWalls = ray_casting(player.position, player.angle, world_map)
+	wall_shot: Position = casted_walls[CENTER_RAY][0], casted_walls[CENTER_RAY][2]
 	walls: Walls = []
 
 	for ray, casted_values in enumerate(casted_walls):
@@ -87,4 +88,4 @@ def ray_casting_walls(player: Player, textures: Surfaces) -> Walls:
 
 		walls.append((depth, wall_column, wall_position))
 
-	return walls
+	return walls, wall_shot

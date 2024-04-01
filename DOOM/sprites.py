@@ -1,5 +1,5 @@
 from collections import deque
-from math import sqrt, cos, atan2, degrees
+from math import sqrt, cos, atan2, degrees, inf
 
 import pygame
 
@@ -68,6 +68,10 @@ class Sprites:
 			Sprite(self.sprite_parameters[SpriteType.FLAME], (8.6, 5.6))
 		]
 
+	@property
+	def sprite_shot(self):
+		return min([_object.is_on_fire for _object in self.list_of_objects], default=(inf, 0))
+
 
 class Sprite:
 	def __init__(self, parameters: SpriteParameters, position: Position) -> None:
@@ -87,33 +91,47 @@ class Sprite:
 			self.sprite_angles = [frozenset(range(i, i + 45)) for i in range(0, 360, 45)]
 			self.sprite_positions = {angle: pos for angle, pos in zip(self.sprite_angles, self.object)}
 
+		# Defaults
+		self.distance_to_sprite = 0.0
+		self.theta = 0.0
+		self.current_ray = 0
+		self.projection_height = 0
+
 	@property
 	def position(self) -> Position:
 		return self.x - self.side // 2, self.y - self.side // 2
 
+	@property
+	def is_on_fire(self) -> Tuple[float, int]:
+		if CENTER_RAY - self.side // 2 < self.current_ray < CENTER_RAY + self.side // 2 and self.blocked:
+			return self.distance_to_sprite, self.projection_height
+
+		return inf, 0
+
 	def object_locate(self, player: Player) -> Tuple[float, Surface, Position] | Tuple[bool]:
 		dx, dy = self.x - player.x, self.y - player.y
-		distance_to_sprite: float = sqrt(dx ** 2 + dy ** 2)
-		theta: float = atan2(dy, dx)
-		gamma: float = theta - player.angle
+		self.distance_to_sprite: float = sqrt(dx ** 2 + dy ** 2)
+		self.theta: float = atan2(dy, dx)
+		gamma: float = self.theta - player.angle
 
 		if dx > 0 and 180 <= degrees(player.angle) <= 360 or dx < 0 and dy < 0:
 			gamma += DOUBLE_PI
 
-		current_ray: int = CENTER_RAY + int(gamma / DELTA_ANGLE)
-		distance_to_sprite *= cos(HALF_FOV - current_ray * DELTA_ANGLE)
+		self.current_ray: int = CENTER_RAY + int(gamma / DELTA_ANGLE)
+		self.distance_to_sprite *= cos(HALF_FOV - self.current_ray * DELTA_ANGLE)
 
-		if 0 <= current_ray + FAKE_RAYS <= FAKE_RAYS_RANGE and distance_to_sprite > 30:
-			projection_height: int = min(int(PROJECTION_COEFFICIENT / distance_to_sprite * self.scale), DOUBLE_HEIGHT)
-			half_projection_height: int = projection_height // 2
+		if 0 <= self.current_ray + FAKE_RAYS <= FAKE_RAYS_RANGE and self.distance_to_sprite > 30:
+			self.projection_height: int = min(int(PROJECTION_COEFFICIENT / self.distance_to_sprite * self.scale),
+			                                  DOUBLE_HEIGHT)
+			half_projection_height: int = self.projection_height // 2
 			shift: float = half_projection_height * self.shift
 
 			# Selecting sprite for angle
 			if self.viewing_angles:
-				if theta < 0:
-					theta += DOUBLE_PI
+				if self.theta < 0:
+					self.theta += DOUBLE_PI
 
-				theta = 360 - int(degrees(theta))
+				theta = 360 - int(degrees(self.theta))
 
 				for angles in self.sprite_angles:
 					if theta in angles:
@@ -124,7 +142,7 @@ class Sprite:
 
 			# Sprite animations
 			sprite_object: Surface = self.object
-			if self.animation and distance_to_sprite < self.animation_dist:
+			if self.animation and self.distance_to_sprite < self.animation_dist:
 				sprite_object = self.animation[0]
 
 				if self.animation_count < self.animation_speed:
@@ -133,9 +151,9 @@ class Sprite:
 					self.animation.rotate()
 					self.animation_count = 0
 
-			sprite_position: Position = current_ray * SCALE - half_projection_height, HALF_HEIGHT - half_projection_height + shift
-			sprite: Surface = pygame.transform.scale(sprite_object, (projection_height, projection_height))
+			sprite_position: Position = self.current_ray * SCALE - half_projection_height, HALF_HEIGHT - half_projection_height + shift
+			sprite: Surface = pygame.transform.scale(sprite_object, (self.projection_height, self.projection_height))
 
-			return distance_to_sprite, sprite, sprite_position
+			return self.distance_to_sprite, sprite, sprite_position
 		else:
 			return False,

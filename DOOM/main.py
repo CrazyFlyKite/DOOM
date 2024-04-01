@@ -33,11 +33,11 @@ if __name__ == '__main__':
 
 		# Draw
 		drawing.background(player.angle)
-		walls: Walls = ray_casting_walls(player, drawing.textures)
+		walls, wall_shot = ray_casting_walls(player, drawing.textures)
 		drawing.world(walls + [sprite.object_locate(player) for sprite in sprites.list_of_objects])
 		drawing.fps(clock)
 		drawing.mini_map(player)
-		drawing.player_weapon()
+		drawing.player_weapon([wall_shot, sprites.sprite_shot])
 
 		# Other
 		pygame.display.flip()

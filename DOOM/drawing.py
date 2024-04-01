@@ -1,5 +1,5 @@
-from math import sin, cos, degrees
 from collections import deque
+from math import sin, cos, degrees
 
 import pygame
 
@@ -35,6 +35,16 @@ class Drawing:
 		self.shot_animation_count = 0
 		self.shot_animation_trigger = True
 
+		# SFX
+		self.sfx = deque([
+			pygame.image.load(f'../assets/sprites/weapons/sfx/{i}.png').convert_alpha() for i in range(9)
+		])
+		self.sfx_length_count = 0
+		self.sfx_length = len(self.sfx)
+
+		# Defaults
+		self.shot_projection = 0
+
 	def background(self, angle: float) -> None:
 		sky_offset: float = -5 * degrees(angle) % WIDTH
 		self.screen.blit(self.textures[SKY], (sky_offset, 0))
@@ -63,8 +73,11 @@ class Drawing:
 
 		self.screen.blit(self.screen_map, MAP_POSITION)
 
-	def player_weapon(self) -> None:
+	def player_weapon(self, shots: List[Position | int]) -> None:
 		if self.player.shot:
+			self.shot_projection = min(shots)[1] // 2
+			self.bullet_sfx()
+
 			shot_sprite: Surface = self.weapon_shot_animation[0]
 			self.screen.blit(shot_sprite, self.weapon_position)
 			self.shot_animation_count += 1
@@ -78,6 +91,15 @@ class Drawing:
 			if self.shot_length_count == self.shot_length:
 				self.player.shot = False
 				self.shot_length_count = 0
+				self.sfx_length_count = 0
 				self.shot_animation_trigger = True
 		else:
 			self.screen.blit(self.weapon_base_sprite, self.weapon_position)
+
+	def bullet_sfx(self) -> None:
+		if self.sfx_length_count < self.sfx_length:
+			sfx: Surface = pygame.transform.scale(self.sfx[0], (self.shot_projection, self.shot_projection))
+			sfx_rect: pygame.Rect = sfx.get_rect()
+			self.screen.blit(sfx, (HALF_WIDTH - sfx_rect.w // 2, HALF_HEIGHT - sfx_rect.h // 2))
+			self.sfx_length_count += 1
+			self.sfx.rotate(-1)
