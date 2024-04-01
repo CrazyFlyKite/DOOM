@@ -6,8 +6,10 @@ filterwarnings('ignore')
 # Disable Pygame welcome message
 with redirect_stdout(None):
 	import pygame
+	from pygame.time import Clock
 
 from drawing import Drawing
+from interaction import Interaction
 from player import Player
 from utilities import *
 from sprites import Sprites
@@ -22,13 +24,14 @@ mini_map: Surface = Surface(MINIMAP_RESOLUTION)
 pygame.mouse.set_visible(False)
 
 sprites: Sprites = Sprites()
-clock: pygame.time.Clock = pygame.time.Clock()
+clock: Clock = Clock()
 player: Player = Player(sprites)
 drawing: Drawing = Drawing(screen, mini_map, player)
+interaction: Interaction = Interaction(player, sprites, drawing)
 
 if __name__ == '__main__':
 	while True:
-		# Move player
+		# Move player_position
 		player.move()
 
 		# Draw
@@ -38,6 +41,7 @@ if __name__ == '__main__':
 		drawing.fps(clock)
 		drawing.mini_map(player)
 		drawing.player_weapon([wall_shot, sprites.sprite_shot])
+		interaction.interaction_objects()
 
 		# Other
 		pygame.display.flip()

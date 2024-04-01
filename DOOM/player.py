@@ -21,7 +21,7 @@ class Player:
 	@property
 	def collision_list(self) -> List[pygame.Rect]:
 		return collision_walls + [pygame.Rect(*sprite.position, sprite.side, sprite.side)
-		                          for sprite in self.sprites.list_of_objects if sprite.blocked]
+		                          for sprite in self.sprites.list_of_objects if sprite.is_blocked]
 
 	def detect_collision(self, dx: float, dy: float) -> None:
 		next_rect: pygame.Rect = self.rect.copy()

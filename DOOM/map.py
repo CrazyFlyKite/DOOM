@@ -1,4 +1,4 @@
-from typing import Dict, Set, Optional
+from typing import Dict, Set
 
 import pygame
 from numba import int32
@@ -23,7 +23,7 @@ def load_map(map_file: PathLikeString, separator: Optional[str] = ' ') -> List[L
 
 
 # Initialize
-map_array: List[List[int]] = load_map(MAP_FILE)
+map_array: List[List[int]] = load_map('../assets/data/map.txt')
 WORLD_WIDTH: Final[int] = len(map_array[0]) * TILE
 WORLD_HEIGHT: Final[int] = len(map_array) * TILE
 
