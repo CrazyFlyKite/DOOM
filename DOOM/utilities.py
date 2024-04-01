@@ -11,7 +11,7 @@ Position: TypeAlias = Tuple[Number, Number]
 Surfaces: TypeAlias = List[Surface]
 Wall: TypeAlias = Tuple[float, Surface, Position]
 Walls: TypeAlias = List[Wall]
-RayCastedWalls: TypeAlias = List[Tuple[float, int, int, int]]
+CastedWalls: TypeAlias = List[Tuple[float, int, int, int]]
 Color: TypeAlias = Tuple[int, int, int]
 PathLikeString: TypeAlias = str | bytes | PathLike
 
@@ -22,7 +22,6 @@ HALF_WIDTH: Final[int] = WIDTH // 2
 HALF_HEIGHT: Final[int] = HEIGHT // 2
 PENTA_HEIGHT: Final[int] = HEIGHT * 5
 DOUBLE_HEIGHT: Final[int] = HEIGHT * 2
-
 TILE: Final[int] = 100
 
 FPS_LABEL_POSITION: Final[Position] = WIDTH - 50, 5
@@ -32,16 +31,14 @@ MAP_FILE: Final[PathLikeString] = '../assets/data/map.txt'
 # Mini map
 MINIMAP_SCALE: Final[int] = 5
 MINIMAP_RESOLUTION: Final[Position] = (WIDTH // MINIMAP_SCALE, HEIGHT // MINIMAP_SCALE)
-MAP_SCALE: Final[int] = 2 * MINIMAP_SCALE
+MAP_SCALE: Final[int] = MINIMAP_SCALE * 2
 MAP_TILE: Final[int] = TILE // MAP_SCALE
 MAP_POSITION: Final[Position] = 0, HEIGHT - HEIGHT // MINIMAP_SCALE
-MAP_WIDTH: Final[int] = WIDTH // MAP_SCALE
-MAP_HEIGHT: Final[int] = HEIGHT // MAP_SCALE
 
 # Player
 PLAYER_POSITION: Position = HALF_WIDTH // 4, HALF_HEIGHT
 PLAYER_ANGLE: Final[float] = 0
-PLAYER_SPEED: Final[int] = 3
+PLAYER_SPEED: Final[int] = 4
 PLAYER_ROTATION_SPEED: Final[float] = 0.03
 PLAYER_MOUSE_SENSITIVITY: Final[float] = 0.003
 PLAYER_SIDE: Final[int] = 50
@@ -50,16 +47,15 @@ PLAYER_SIDE: Final[int] = 50
 FOV: Final[float] = pi / 3
 HALF_FOV: Final[float] = FOV / 2
 NUMBER_RAYS: Final[int] = 300
-MAX_DEPTH: Final[int] = 800
 DELTA_ANGLE: Final[float] = FOV / NUMBER_RAYS
 DIST: Final[float] = NUMBER_RAYS / (2 * tan(HALF_FOV))
 PROJECTION_COEFFICIENT: Final[float] = 3 * DIST * TILE
 SCALE: Final[int] = WIDTH // NUMBER_RAYS
 
 # Texture settings
-TEXTURE_WIDTH: Final[int] = 1200
-TEXTURE_HEIGHT: Final[int] = 1200
-TEXTURE_SCALE: Final[int] = TEXTURE_WIDTH // TILE
+TEXTURE_SIZE: Final[int] = 1200
+HALF_TEXTURE_SIZE: Final[int] = TEXTURE_SIZE // 2
+TEXTURE_SCALE: Final[int] = TEXTURE_SIZE // TILE
 
 # Texture types
 VOID: Final[int] = 0

@@ -71,77 +71,21 @@ class Sprites:
 
 class Sprite:
 	def __init__(self, parameters: SpriteParameters, position: Position) -> None:
-		self._object = parameters.sprite
-		self._viewing_angles = parameters.viewing_angles
-		self._shift = parameters.shift
-		self._scale = parameters.scale
-		self._animation = parameters.animation
-		self._animation_dist = parameters.animation_dist
-		self._animation_speed = parameters.animation_speed
-		self._animation_count = 0
-		self._blocked = parameters.blocked
-		self._side = 30
-		self._x, self._y = position[0] * TILE, position[1] * TILE
+		self.object = parameters.sprite
+		self.viewing_angles = parameters.viewing_angles
+		self.shift = parameters.shift
+		self.scale = parameters.scale
+		self.animation = parameters.animation
+		self.animation_dist = parameters.animation_dist
+		self.animation_speed = parameters.animation_speed
+		self.animation_count = 0
+		self.blocked = parameters.blocked
+		self.side = 30
+		self.x, self.y = position[0] * TILE, position[1] * TILE
 
-		if self._viewing_angles:
+		if self.viewing_angles:
 			self.sprite_angles = [frozenset(range(i, i + 45)) for i in range(0, 360, 45)]
-			self.sprite_positions = {angle: pos for angle, pos in zip(self.sprite_angles, self._object)}
-
-	@property
-	def object(self) -> Surface | Surfaces:
-		return self._object
-
-	@object.setter
-	def object(self, value: Surface | Surfaces) -> None:
-		self._object = value
-
-	@property
-	def viewing_angles(self) -> bool:
-		return self._viewing_angles
-
-	@property
-	def shift(self) -> float:
-		return self._shift
-
-	@property
-	def scale(self) -> float:
-		return self._scale
-
-	@property
-	def animation(self) -> Deque[Surface]:
-		return self._animation
-
-	@property
-	def animation_dist(self) -> int:
-		return self._animation_dist
-
-	@property
-	def animation_speed(self) -> int:
-		return self._animation_speed
-
-	@property
-	def animation_count(self) -> int:
-		return self._animation_count
-
-	@animation_count.setter
-	def animation_count(self, value: int) -> None:
-		self._animation_count = value
-
-	@property
-	def is_blocked(self) -> bool:
-		return self._blocked
-
-	@property
-	def side(self) -> int:
-		return self._side
-
-	@property
-	def x(self) -> Number:
-		return self._x
-
-	@property
-	def y(self) -> Number:
-		return self._y
+			self.sprite_positions = {angle: pos for angle, pos in zip(self.sprite_angles, self.object)}
 
 	@property
 	def position(self) -> Position:

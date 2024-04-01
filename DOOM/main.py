@@ -1,6 +1,9 @@
-import sys
 from contextlib import redirect_stdout
+from warnings import filterwarnings
 
+filterwarnings('ignore')
+
+# Disable Pygame welcome message
 with redirect_stdout(None):
 	import pygame
 
@@ -21,14 +24,10 @@ pygame.mouse.set_visible(False)
 sprites: Sprites = Sprites()
 clock: pygame.time.Clock = pygame.time.Clock()
 player: Player = Player(sprites)
-drawing: Drawing = Drawing(screen, mini_map)
+drawing: Drawing = Drawing(screen, mini_map, player)
 
 if __name__ == '__main__':
 	while True:
-		for event in pygame.event.get():
-			if event.type == pygame.QUIT:
-				sys.exit(0)
-
 		# Move player
 		player.move()
 
@@ -38,6 +37,7 @@ if __name__ == '__main__':
 		drawing.world(walls + [sprite.object_locate(player) for sprite in sprites.list_of_objects])
 		drawing.fps(clock)
 		drawing.mini_map(player)
+		drawing.player_weapon()
 
 		# Other
 		pygame.display.flip()

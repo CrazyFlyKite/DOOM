@@ -1,4 +1,5 @@
 from math import sin, cos, degrees
+from collections import deque
 
 import pygame
 
@@ -8,9 +9,10 @@ from utilities import *
 
 
 class Drawing:
-	def __init__(self, screen: Surface, screen_map: Surface) -> None:
+	def __init__(self, screen: Surface, screen_map: Surface, player: Player) -> None:
 		self.screen = screen
 		self.screen_map = screen_map
+		self.player = player
 		self.font = pygame.font.SysFont('Arial', 30, bold=True)
 		self.textures = {
 			WALL1: pygame.image.load('../assets/images/wall 1.png').convert(),
@@ -19,6 +21,19 @@ class Drawing:
 			WALL4: pygame.image.load('../assets/images/wall 4.png').convert(),
 			SKY: pygame.image.load('../assets/images/sky.png').convert()
 		}
+
+		# Player weapon
+		self.weapon_base_sprite = pygame.image.load('../assets/sprites/weapons/shotgun/base/0.png').convert_alpha()
+		self.weapon_shot_animation = deque([
+			pygame.image.load(f'../assets/sprites/weapons/shotgun/shot/{i}.png').convert_alpha() for i in range(20)
+		])
+		self.weapon_rect = self.weapon_base_sprite.get_rect()
+		self.weapon_position = HALF_WIDTH - self.weapon_rect.width // 2, HEIGHT - self.weapon_rect.height
+		self.shot_length = len(self.weapon_shot_animation)
+		self.shot_length_count = 0
+		self.shot_animation_speed = 3
+		self.shot_animation_count = 0
+		self.shot_animation_trigger = True
 
 	def background(self, angle: float) -> None:
 		sky_offset: float = -5 * degrees(angle) % WIDTH
@@ -47,3 +62,22 @@ class Drawing:
 			pygame.draw.rect(self.screen_map, DARK_BROWN, (x, y, MAP_TILE, MAP_TILE))
 
 		self.screen.blit(self.screen_map, MAP_POSITION)
+
+	def player_weapon(self) -> None:
+		if self.player.shot:
+			shot_sprite: Surface = self.weapon_shot_animation[0]
+			self.screen.blit(shot_sprite, self.weapon_position)
+			self.shot_animation_count += 1
+
+			if self.shot_animation_count == self.shot_animation_speed:
+				self.weapon_shot_animation.rotate(-1)
+				self.shot_animation_count = 0
+				self.shot_length_count += 1
+				self.shot_animation_trigger = False
+
+			if self.shot_length_count == self.shot_length:
+				self.player.shot = False
+				self.shot_length_count = 0
+				self.shot_animation_trigger = True
+		else:
+			self.screen.blit(self.weapon_base_sprite, self.weapon_position)
