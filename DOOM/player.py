@@ -1,6 +1,7 @@
 from math import sin, cos
 
 import pygame
+from pygame import Rect
 
 from map import collision_walls
 from utilities import *
@@ -10,7 +11,7 @@ class Player:
 	def __init__(self, sprites: 'Sprites') -> None:  # NOQA
 		self.x, self.y = PLAYER_POSITION
 		self.angle = PLAYER_ANGLE
-		self.rect = pygame.Rect(*PLAYER_POSITION, PLAYER_SIDE, PLAYER_SIDE)
+		self.rect = Rect(*PLAYER_POSITION, PLAYER_SIDE, PLAYER_SIDE)
 		self.sprites = sprites
 		self.shot = False
 
@@ -19,12 +20,12 @@ class Player:
 		return int(self.x), int(self.y)
 
 	@property
-	def collision_list(self) -> List[pygame.Rect]:
-		return collision_walls + [pygame.Rect(*sprite.position, sprite.side, sprite.side)
+	def collision_list(self) -> List[Rect]:
+		return collision_walls + [Rect(*sprite.position, sprite.side, sprite.side)
 		                          for sprite in self.sprites.list_of_objects if sprite.is_blocked]
 
 	def detect_collision(self, dx: float, dy: float) -> None:
-		next_rect: pygame.Rect = self.rect.copy()
+		next_rect: Rect = self.rect.copy()
 		next_rect.move_ip(dx, dy)
 
 		if len(hit_indices := next_rect.collidelistall(self.collision_list)):
@@ -88,6 +89,10 @@ class Player:
 			dy = PLAYER_SPEED * cos_a
 			self.detect_collision(dx, dy)
 
+		# Shoot
+		if keys[pygame.K_e] and not self.shot:
+			self.shot = True
+
 		# Rotate
 		if keys[pygame.K_LEFT]:  # Left
 			self.angle -= PLAYER_ROTATION_SPEED
@@ -108,4 +113,4 @@ class Player:
 		if pygame.mouse.get_focused():
 			difference: int = pygame.mouse.get_pos()[0] - HALF_WIDTH
 			pygame.mouse.set_pos((HALF_WIDTH, HALF_HEIGHT))
-			self.angle += difference * PLAYER_MOUSE_SENSITIVITY
+			self.angle += difference * PLAYER_MOUSE_SENSITIVITY / 100000

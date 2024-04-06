@@ -37,7 +37,7 @@ PLAYER_POSITION: Position = HALF_WIDTH // 4, HALF_HEIGHT
 PLAYER_ANGLE: Final[float] = 0
 PLAYER_SPEED: Final[int] = 4
 PLAYER_ROTATION_SPEED: Final[float] = 0.03
-PLAYER_MOUSE_SENSITIVITY: Final[float] = 0.003
+PLAYER_MOUSE_SENSITIVITY: Final[float] = 300
 PLAYER_SIDE: Final[int] = 50
 
 # Ray casting
@@ -61,6 +61,7 @@ WALL2: Final[int] = 2
 WALL3: Final[int] = 3
 WALL4: Final[int] = 4
 SKY: Final[int] = 5
+MENU: Final[int] = 6
 
 # Sprites settings
 DOUBLE_PI: Final[float] = pi * 2
@@ -75,34 +76,29 @@ class SpriteType:
 	PIN: int = 1
 	DEVIL: int = 2
 	FLAME: int = 3
-	DOOR_V: int = 4
-	DOOR_H: int = 5
-	SOLIDER: int = 6
+	SOLIDER: int = 4
 
 
 class Flag:
 	DECORATION: int = 0
 	NPC: int = 1
-	DOOR_H: int = 2
-	DOOR_V: int = 3
 
 
 class DeathType:
-	NONE: None = None
+	MORTAL: None = None
 	IMMORTAL: str = 'immortal'
-	TRUE: bool = True
 
 
 # Dataclass for sprite parameters
-@dataclass(frozen=True)
+@dataclass(frozen=True, order=True)
 class SpriteParameters:
 	sprite: Surface | Surfaces
-	viewing_angles: bool
+	has_viewing_angles: bool
 	shift: float
 	scale: Scale
 	side: int
 	animation: Deque[Surface]
-	animation_dist: int
+	animation_dist: Optional[int]
 	animation_speed: int
 	death_animation: Deque[Surface]
 	death_type: Optional[str]
@@ -110,7 +106,6 @@ class SpriteParameters:
 	is_blocked: Optional[bool]
 	flag: int
 	object_action: Deque[Surface]
-	is_dead: bool = False
 
 
 # Colors
@@ -118,5 +113,6 @@ RED: Final[Color] = 220, 0, 0
 DARK_ORANGE: Final[Color] = 255, 140, 0
 YELLOW: Final[Color] = 220, 220, 0
 DARK_BROWN: Final[Color] = 97, 61, 25
+LIGHT_GRAY: Final[Color] = 211, 211, 211
 DARK_GRAY: Final[Color] = 110, 110, 110
 BLACK: Final[Color] = 0, 0, 0
